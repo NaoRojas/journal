@@ -3,12 +3,17 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './index.css'
 import { Navbar } from './components/Navbar'
+import { AppRouter } from './router/AppRouter'
+import { BrowserRouter } from 'react-router-dom'
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <body>
+      <BrowserRouter>
+        <AppRouter />
+      </BrowserRouter>
+      {/* <body>
         <main vaul-drawer-wrapper="" className="min-h-screen bg-white">
           <div className="lg:flex">
             <Navbar />
@@ -30,7 +35,7 @@ function App() {
             </div>
           </div>
         </main>
-      </body>
+      </body> */}
     </>
   )
 }
