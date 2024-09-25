@@ -1,8 +1,10 @@
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { AuthLayout } from '../layout/AuthLayout'
+import { useNavigate } from 'react-router'
 
 export const LoginPage = () => {
+  const navigate = useNavigate()
   return (
     <AuthLayout title="Login" subtitle="Login with your account">
       <form action="">
@@ -21,7 +23,13 @@ export const LoginPage = () => {
             <Input type="password" />
           </div>
           <div className="grid gap-2">
-            <Button>Login</Button>
+            <Button
+              onClick={() => {
+                navigate('/')
+              }}
+            >
+              Login
+            </Button>
           </div>
         </div>
       </form>
@@ -33,7 +41,14 @@ export const LoginPage = () => {
           <span className="bg-background px-2 text-muted-foreground">Or</span>
         </div>
       </div>
-      <Button variant={'secondary'}>Create an Account</Button>
+      <Button
+        variant={'secondary'}
+        onClick={() => {
+          navigate('/auth/register')
+        }}
+      >
+        Create an Account
+      </Button>
     </AuthLayout>
   )
 }
