@@ -1,9 +1,11 @@
 import { Navbar } from './components/Navbar'
+import { Toolbar } from './components/Toolbar'
 export const JournalApp = () => {
   return (
     <body>
       <main vaul-drawer-wrapper="" className="min-h-screen bg-white">
         <div className="lg:flex">
+          <Toolbar />
           <Navbar />
           <div className="flex flex-1">
             <div className="scrollable-area relative flex w-full flex-col">
