@@ -3,8 +3,9 @@ import { SideMenu } from '@/components/SideMenu'
 import { Toolbar } from '@/components/Toolbar'
 import { MenuContent } from '@/componets/MenuContent'
 import { AddFloatingButton } from '../components/AddFloatingButton'
+import { Outlet } from 'react-router-dom'
 
-export const JournalLayout = ({ children }) => {
+export const JournalLayout = () => {
   return (
     <body>
       <main vaul-drawer-wrapper="" className="min-h-screen  bg-white">
@@ -17,7 +18,9 @@ export const JournalLayout = ({ children }) => {
             <div className="flex flex-1">
               <div className="scrollable-area relative flex w-full flex-col">
                 <div className="content-wrapper h-full">
-                  <div className="content h-full">{children}</div>
+                  <div className="content h-full">
+                    <Outlet />
+                  </div>
                   <AddFloatingButton />
                 </div>
               </div>
