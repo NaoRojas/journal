@@ -1,12 +1,14 @@
-import { set } from 'date-fns';
 import { createSlice } from '@reduxjs/toolkit'
 import { Note } from '@/models/noteType'
+import { formatDate } from '@/journal/helpers/convertDate';
 
 interface State {
   isLoading: boolean;
   isSuccessful: boolean;
   entries: Note[];
-  activeEntry?: Note | null
+  activeEntry?: Note | null,
+  month?: string
+  filteredEntries?: Note[]
 }
 
 const initialState: State = {
@@ -14,17 +16,29 @@ const initialState: State = {
   isSuccessful: false,
   entries: [],
   activeEntry: null,
+  month: 'September',
+  filteredEntries: []
 }
 
 export const journalSlice = createSlice({
   name: 'journal',
   initialState,
   reducers: {
-    getEntriesByMonth: (state, action) => {
+
+    filterEntriesByMonth: (state, action) => {
       state.isLoading = true;
       state.isSuccessful = true
+      state.month = action.payload
+      state.filteredEntries = state.entries.filter((entry) => formatDate(entry.date).includes(action.payload))
     },
-
+    setEntries: (state, action) => {
+      state.entries = action.payload
+      state.isLoading = false;
+      state.isSuccessful = true
+    },
+    setMonth: (state, action) => {
+      state.month = action.payload
+    },
     setActiveEntry: (state, action) => {
       state.activeEntry = action.payload
     },
@@ -57,4 +71,9 @@ export const journalSlice = createSlice({
 export const { addEntry,
   setActiveEntry,
   setLoading,
-  updateEntry, deleteEntry } = journalSlice.actions
+  setEntries,
+  filterEntriesByMonth,
+  updateEntry,
+  deleteEntry,
+  setMonth,
+} = journalSlice.actions

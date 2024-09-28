@@ -1,6 +1,11 @@
+import { setMonth } from '@/store/journal/journalSlice'
 import { Inbox, Sparkle, Sparkles } from 'lucide-react'
+import { useDispatch } from 'react-redux'
+import { getEntriesByMonth } from '@/store/journal/thunks'
+import { getFilteredNotes } from '@/journal/helpers/getFilteredNotes'
+import { useSelector } from 'react-redux'
 
-const entries = [
+let menuItems = [
   {
     month: 'January',
     amount: 1,
@@ -52,6 +57,23 @@ const entries = [
 ]
 
 export const Navbar = () => {
+  const dispatch = useDispatch()
+  const { entries } = useSelector((state) => state.journal)
+
+  const handleMenuClick = (month) => {
+    dispatch(getEntriesByMonth(month))
+  }
+
+  const setMenuItems = () => {
+    menuItems = menuItems.map((entry) => {
+      return {
+        ...entry,
+        amount: getFilteredNotes(entries, entry.month),
+      }
+    })
+  }
+  setMenuItems()
+
   return (
     <div className="scrollable-area relative w-full flex-col bg-zinc-50 lg:flex lg:flex-col lg:border-r lg:w-60  h-screen">
       <div className="bg-stone-100 p-3 max-h-full">
@@ -62,9 +84,12 @@ export const Navbar = () => {
         </div>
         <div className="flex w-full h-full flex-col text-sm mt-10">
           <div className="flex flex-col gap-1">
-            {entries.map((entry) => {
+            {menuItems.map((entry) => {
               return (
-                <a className="group flex items-center justify-between rounded-lg p-2 hover:bg-gray-200">
+                <a
+                  className="group flex items-center justify-between rounded-lg p-2 hover:bg-gray-200"
+                  onClick={() => handleMenuClick(entry.month)}
+                >
                   <span className="flex items-center gap-2">
                     <Sparkles size={16} className="text-black" />
                     <span className="font-medium text-black">
