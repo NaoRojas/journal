@@ -8,7 +8,7 @@ export enum Emotion {
 }
 
 export type Note = {
-  id: string
+  id?: string
   body: string
   date: string
   title: string

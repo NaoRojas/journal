@@ -1,13 +1,22 @@
-export const EmotionButton = ({ emotion, onInputChange }) => {
+import React, { useState } from 'react'
+export const EmotionButton = ({ emotion, onInputChange, className }) => {
+  const [emotionSelected, setEmotionSelected] = useState(false)
+
+  const handleClick = () => {
+    onInputChange({ target: { name: 'emotion', value: emotion } })
+    setEmotionSelected(!emotionSelected)
+  }
+
   return (
     <div
-      className="flex flex-col gap-2 items-center hover:font-medium w-15 px-2"
-      onClick={() =>
-        onInputChange({ target: { name: 'emotion', value: emotion } })
+      className={
+        `flex flex-col gap-2 items-center hover:font-medium w-20 p-5 radius rounded-lg ` +
+        className
       }
+      onClick={() => handleClick()}
     >
-      <span className={`p-6 rounded-full bg-${emotion}`}></span>
-      <span className="text-black capitalize">{emotion}</span>
+      <div className={`p-6 rounded-full bg-${emotion}`}></div>
+      <p className="text-black capitalize">{emotion}</p>
     </div>
   )
 }

@@ -6,8 +6,11 @@ import { JournalLayout } from '../layout/JournalLayout'
 import { useForm } from '@/hooks/use-form'
 import { Emotion } from '@/models/noteType'
 import { EmotionButton } from '../components/EmotionButton'
+import { useDispatch } from 'react-redux'
+import { addNewEntry } from '@/store/journal/thunks'
 
 export const NoteView = () => {
+  const dispatch = useDispatch()
   const { date, title, body, emotion, onInputChange } = useForm({
     date: '',
     title: '',
@@ -25,6 +28,7 @@ export const NoteView = () => {
       body,
       emotion,
     })
+    dispatch(addNewEntry({ date, title, body, emotion }))
   }
   return (
     <>
@@ -71,10 +75,11 @@ export const NoteView = () => {
                   Choose your Emotion
                 </h2>
                 <div className="flex gap-6">
-                  {emotions.map((emotion) => (
+                  {emotions.map((em) => (
                     <EmotionButton
-                      key={emotion}
-                      emotion={emotion}
+                      className={emotion === em ? 'bg-accent' : ''}
+                      key={em}
+                      emotion={em}
                       onInputChange={onInputChange}
                     />
                   ))}
