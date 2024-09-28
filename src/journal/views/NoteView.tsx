@@ -20,6 +20,7 @@ export const NoteView = ({ note }: NoteViewProps) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { isLoading } = useSelector((state) => state.journal)
+  const isEditMode = !!note
   const formData = note || {
     date: '',
     title: '',
@@ -32,11 +33,20 @@ export const NoteView = ({ note }: NoteViewProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log({
-      note,
-    })
-    dispatch(addNewEntry({ date, title, body, emotion }))
+    if (isEditMode) {
+      // dispatch(updateEntry({ date, title, body, emotion }))
+    } else {
+      dispatch(addNewEntry({ date, title, body, emotion }))
+    }
     navigate(-1)
+  }
+
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    })
   }
   return (
     <>
@@ -44,7 +54,7 @@ export const NoteView = ({ note }: NoteViewProps) => {
         <div className="flex">
           <div className="basis-3/4 items-center justify-center">
             <h2 className="text-2xl font-bold tracking-tight">
-              {note ? note.title : 'New Note'}
+              {note ? `Subject: ${note.title}` : 'New Note'}
             </h2>
             {!note && (
               <p className="text-medium text-muted-foreground">
@@ -57,7 +67,7 @@ export const NoteView = ({ note }: NoteViewProps) => {
                   {note ? 'Date' : 'Pick a Date'}
                 </label>
                 {note ? (
-                  <p>{note.date}</p>
+                  <p>{formatDate(note.date.toString())}</p>
                 ) : (
                   <DatePicker
                     onSelect={(date) =>
@@ -66,20 +76,22 @@ export const NoteView = ({ note }: NoteViewProps) => {
                   ></DatePicker>
                 )}
               </div>
-              <div className="grid gap-2">
-                <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Subject
-                </label>
-                {note ? (
-                  <h2>{note.title}</h2>
-                ) : (
-                  <Input
-                    value={title}
-                    name="title"
-                    onChange={onInputChange}
-                  ></Input>
-                )}
-              </div>
+              {!note && (
+                <div className="grid gap-2">
+                  <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    Subject
+                  </label>
+                  {note ? (
+                    <h2>{note.title}</h2>
+                  ) : (
+                    <Input
+                      value={title}
+                      name="title"
+                      onChange={onInputChange}
+                    ></Input>
+                  )}
+                </div>
+              )}
               <div className="grid gap-2">
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   Description
@@ -95,7 +107,7 @@ export const NoteView = ({ note }: NoteViewProps) => {
                 )}
               </div>
               <h2 className="text-xl font-bold tracking-tight">
-                Choose your Emotion
+                {note ? `Your emotion` : 'How do you feel today?'}
               </h2>
               <div className="flex gap-6">
                 {emotions.map((em) => (
@@ -103,22 +115,19 @@ export const NoteView = ({ note }: NoteViewProps) => {
                     className={emotion === em ? 'bg-accent' : ''}
                     key={em}
                     emotion={em}
+                    disabled={!!note}
                     onInputChange={onInputChange}
                   />
                 ))}
               </div>
               <div className="flex flex-col-2 justify-end">
-                <Button
-                  className="mr-2"
-                  type="button"
-                  variant={'outline'}
-                  disabled={isLoading}
-                  onClick={() => navigate(-1)}
-                >
-                  Cancel
-                </Button>
+                {!note && (
+                  <Button type="submit" disabled={isLoading}>
+                    Create Note
+                  </Button>
+                )}
                 <Button type="submit" disabled={isLoading}>
-                  Create Note
+                  {note ? 'Update Note' : 'Create Note'}
                 </Button>
               </div>
             </div>

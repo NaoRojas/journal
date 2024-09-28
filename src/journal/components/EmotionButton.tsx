@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
-export const EmotionButton = ({ emotion, onInputChange, className }) => {
+export const EmotionButton = ({
+  emotion,
+  onInputChange,
+  className,
+  disabled,
+}) => {
   const [emotionSelected, setEmotionSelected] = useState(false)
 
   const handleClick = () => {
+    if (disabled) return
     onInputChange({ target: { name: 'emotion', value: emotion } })
     setEmotionSelected(!emotionSelected)
   }
