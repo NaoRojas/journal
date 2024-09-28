@@ -1,6 +1,7 @@
 import { JournalLayout } from '../layout/JournalLayout'
 import { NothingSelectedView } from '@/journal/views/NothingSelected'
 import { NoteView } from '../views/NoteView'
+import { AddFloatingButton } from '../components/AddFloatingButton'
 export const JournalPage = () => {
   return (
     <JournalLayout>
@@ -11,8 +12,8 @@ export const JournalPage = () => {
         success. Please come prepared with any questions or insights you may
         have. Looking forward to our meeting! Best regards, William
       </div> */}
-      {/* <NothingSelectedView></NothingSelectedView> */}
-      <NoteView />
+      <NothingSelectedView></NothingSelectedView>
+      {/* <NoteView /> */}
     </JournalLayout>
   )
 }

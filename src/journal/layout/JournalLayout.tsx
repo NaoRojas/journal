@@ -2,6 +2,7 @@ import { Navbar } from '@/components/Navbar'
 import { SideMenu } from '@/components/SideMenu'
 import { Toolbar } from '@/components/Toolbar'
 import { MenuContent } from '@/componets/MenuContent'
+import { AddFloatingButton } from '../components/AddFloatingButton'
 
 export const JournalLayout = ({ children }) => {
   return (
@@ -17,6 +18,7 @@ export const JournalLayout = ({ children }) => {
               <div className="scrollable-area relative flex w-full flex-col">
                 <div className="content-wrapper h-full">
                   <div className="content h-full">{children}</div>
+                  <AddFloatingButton />
                 </div>
               </div>
             </div>
