@@ -26,15 +26,13 @@ export const journalSlice = createSlice({
   reducers: {
 
     filterEntriesByMonth: (state, action) => {
-      state.isLoading = true;
-      state.isSuccessful = true
+      state.isLoading = false
       state.month = action.payload
       state.filteredEntries = state.entries.filter((entry) => formatDate(entry.date).includes(action.payload))
     },
     setEntries: (state, action) => {
       state.entries = action.payload
       state.isLoading = false;
-      state.isSuccessful = true
     },
     setMonth: (state, action) => {
       state.month = action.payload
@@ -45,7 +43,6 @@ export const journalSlice = createSlice({
     addEntry: (state, action) => {
       state.entries.push(action.payload)
       state.isLoading = false;
-      state.isSuccessful = true
     },
     updateEntry: (state, action) => {
       const { note } = action.payload;

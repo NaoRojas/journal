@@ -4,6 +4,7 @@ import { doc, collection, setDoc } from "firebase/firestore"
 import { addEntry, setActiveEntry, setLoading, setEntries, filterEntriesByMonth } from "./journalSlice"
 import { loadNotes } from "@/journal/helpers/loadNotes"
 import { setMonth } from "./journalSlice"
+import { setMenuItemsNavBar } from "../menu/thunks"
 
 export const addNewEntry = (note: Note) => {
   return async (dispatch, getState) => {
@@ -15,6 +16,7 @@ export const addNewEntry = (note: Note) => {
       console.log('newDoc', newDoc)
       dispatch(addEntry(note))
       dispatch(setActiveEntry(note))
+      dispatch(getEntries())
     }
     catch (error) {
       console.log('error', error)
@@ -25,10 +27,13 @@ export const addNewEntry = (note: Note) => {
 export const getEntries = () => {
   return async (dispatch, getState) => {
     try {
+      dispatch(setLoading(true))
+
       const { uid } = getState().auth
       console.log('uid', uid)
       const notes = await loadNotes({ uid })
       dispatch(setEntries(notes))
+      dispatch(setMenuItemsNavBar(getState().journal.month))
     }
     catch (error) {
       console.log('error', error)
@@ -40,7 +45,8 @@ export const getEntries = () => {
 export const getEntriesByMonth = (month: string) => {
   return async (dispatch, getState) => {
     try {
-      dispatch(getEntries())
+      dispatch(setLoading(true))
+
       dispatch(setMonth(month))
       dispatch(filterEntriesByMonth(month))
     }

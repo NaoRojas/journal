@@ -121,11 +121,13 @@ export const NoteView = ({ note }: NoteViewProps) => {
                 ))}
               </div>
               <div className="flex flex-col-2 justify-end">
-                {!note && (
-                  <Button type="submit" disabled={isLoading}>
-                    Create Note
-                  </Button>
-                )}
+                <Button
+                  variant={'secondary'}
+                  disabled={isLoading}
+                  className="mr-2"
+                >
+                  Cancel
+                </Button>
                 <Button type="submit" disabled={isLoading}>
                   {note ? 'Update Note' : 'Create Note'}
                 </Button>
