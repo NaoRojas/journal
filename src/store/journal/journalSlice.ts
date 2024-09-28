@@ -1,3 +1,4 @@
+import { set } from 'date-fns';
 import { createSlice } from '@reduxjs/toolkit'
 import { Note } from '@/models/noteType'
 
@@ -23,6 +24,10 @@ export const journalSlice = createSlice({
       state.isLoading = true;
       state.isSuccessful = true
     },
+
+    setActiveEntry: (state, action) => {
+      state.activeEntry = action.payload
+    },
     getEntryById: (state, action) => {
       state.isLoading = true;
       state.isSuccessful = true
@@ -47,7 +52,13 @@ export const journalSlice = createSlice({
       state.isLoading = false;
       state.isSuccessful = true
     },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload
+    }
   },
 })
 
-export const { addEntry, updateEntry, deleteEntry } = journalSlice.actions
+export const { addEntry,
+  setActiveEntry,
+  setLoading,
+  updateEntry, deleteEntry } = journalSlice.actions

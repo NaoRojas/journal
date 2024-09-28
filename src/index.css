@@ -399,3 +399,7 @@ a:hover {
 table button {
   background-color: #fff;
 }
+
+button.disabled {
+  background-color: #75706c;
+}

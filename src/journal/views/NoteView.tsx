@@ -8,9 +8,11 @@ import { Emotion } from '@/models/noteType'
 import { EmotionButton } from '../components/EmotionButton'
 import { useDispatch } from 'react-redux'
 import { addNewEntry } from '@/store/journal/thunks'
+import { useSelector } from 'react-redux'
 
 export const NoteView = () => {
   const dispatch = useDispatch()
+  const { isLoading } = useSelector((state) => state.journal)
   const { date, title, body, emotion, onInputChange } = useForm({
     date: '',
     title: '',
@@ -85,7 +87,9 @@ export const NoteView = () => {
                   ))}
                 </div>
                 <div className="flex flex-col-2 justify-end">
-                  <Button type="submit">Create Note</Button>
+                  <Button type="submit" disabled={isLoading}>
+                    Create Note
+                  </Button>
                 </div>
               </div>
             </div>
