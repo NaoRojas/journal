@@ -3,14 +3,17 @@ import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { setMenuItemsNavBar } from '@/store/menu/thunks'
 import { getEntriesByMonth } from '@/store/journal/thunks'
+import { setMonth } from '@/store/journal/journalSlice'
 
 export const Navbar = () => {
   const dispatch = useDispatch()
   const { filteredEntries } = useSelector((state) => state.journal)
   const { menuItems } = useSelector((state) => state.menu)
+  const { month } = useSelector((state) => state.journal)
 
   const handleMenuClick = (month) => {
     dispatch(getEntriesByMonth(month))
+    dispatch(setMonth(month))
   }
 
   console.log('entries', filteredEntries.length)
@@ -28,11 +31,12 @@ export const Navbar = () => {
             {menuItems.map((menuItem) => {
               return (
                 <a
-                  className="group flex items-center justify-between rounded-lg p-2 hover:bg-gray-200"
+                  className={`group flex items-center justify-between rounded-lg p-2 hover:bg-gray-200 ${
+                    month === menuItem.month ? 'bg-gray-300' : ''
+                  }`}
                   onClick={() => handleMenuClick(menuItem.month)}
                 >
                   <span className="flex items-center gap-2">
-                    <Sparkles size={16} className="text-black" />
                     <span className="font-medium text-black">
                       {menuItem.month}
                     </span>
