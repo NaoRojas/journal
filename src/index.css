@@ -395,3 +395,7 @@ a:hover {
 .bg-frustrated {
   background-color: #a05645;
 }
+
+table button {
+  background-color: #fff;
+}

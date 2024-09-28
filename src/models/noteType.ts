@@ -1,11 +1,10 @@
 export enum Emotion {
-  HAPPY = 'HAPPY',
-  SAD = 'SAD',
-  ANGRY = 'ANGRY',
-  NEUTRAL = 'NEUTRAL',
-  FEAR = 'FEAR',
-  SURPRISE = 'SURPRISE',
-  DISGUST = 'DISGUST'
+  Calm = 'calm',
+  Excited = 'excited',
+  Anxious = 'anxious',
+  Surprised = 'surprised',
+  Relaxed = 'relaxed',
+  Frustrated = 'frustrated',
 }
 
 export type Note = {
