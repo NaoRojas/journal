@@ -12,6 +12,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getEntryById } from '@/store/journal/thunks'
 import { formatDate } from '../helpers/convertDate'
+import { Calendar } from 'lucide-react'
 
 export const NoteView = () => {
   const dispatch = useDispatch()
@@ -19,8 +20,8 @@ export const NoteView = () => {
   const { isLoading, activeEntry } = useSelector((state) => state.journal)
   const [isEditMode, setIsEditMode] = useState(false)
   const { id } = useParams()
-  const formData = activeEntry || {
-    date: '',
+  const formData = {
+    date: null,
     title: '',
     body: '',
     emotion: '',
@@ -31,7 +32,9 @@ export const NoteView = () => {
 
   useEffect(() => {
     dispatch(getEntryById(id))
-    setIsEditMode(true)
+    if (id) {
+      setIsEditMode(true)
+    }
   }, [dispatch, id])
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,20 +66,17 @@ export const NoteView = () => {
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   {isEditMode ? 'Date' : 'Pick a Date'}
                 </label>
-                {/* {isEditMode ? (
-                  <p>{formatDate(activeEntry?.date)}</p>
+                {isEditMode ? (
+                  <p>{activeEntry?.date}</p>
                 ) : (
                   <DatePicker
                     onSelect={(date) =>
                       onInputChange({
-                        target: {
-                          name: 'date',
-                          value: date,
-                        },
+                        target: { name: 'date', value: formatDate(date) },
                       })
                     }
-                  ></DatePicker>
-                )} */}
+                  />
+                )}
               </div>
               <div className="grid gap-2">
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">

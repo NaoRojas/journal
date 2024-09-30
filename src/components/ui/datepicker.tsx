@@ -19,6 +19,8 @@ export function DatePicker({ onSelect, value = null }) {
   const onDateSelect = (date) => {
     setDate(date)
     onSelect(value || date)
+    console.log('date', date)
+    console.log('value', value)
   }
 
   React.useEffect(() => {
@@ -46,7 +48,11 @@ export function DatePicker({ onSelect, value = null }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar selected={value || date} onSelect={onDateSelect} />
+        <Calendar
+          mode="single"
+          selected={value || date}
+          onSelect={onDateSelect}
+        />
       </PopoverContent>
     </Popover>
   )
