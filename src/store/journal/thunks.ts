@@ -49,6 +49,7 @@ export const getEntriesByMonth = (month: string) => {
 
       dispatch(setMonth(month))
       dispatch(filterEntriesByMonth(month))
+
     }
     catch (error) {
       console.log('error', error)

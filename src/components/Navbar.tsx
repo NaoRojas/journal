@@ -13,7 +13,6 @@ export const Navbar = () => {
 
   const handleMenuClick = (month) => {
     dispatch(getEntriesByMonth(month))
-    dispatch(setMonth(month))
   }
 
   console.log('entries', filteredEntries.length)

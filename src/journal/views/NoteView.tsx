@@ -2,26 +2,25 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { DatePicker } from '@/components/ui/datepicker'
 import { Button } from '@/components/ui/button'
-import { JournalLayout } from '../layout/JournalLayout'
 import { useForm } from '@/hooks/use-form'
 import { Emotion } from '@/models/noteType'
 import { EmotionButton } from '../components/EmotionButton'
 import { useDispatch } from 'react-redux'
 import { addNewEntry } from '@/store/journal/thunks'
 import { useSelector } from 'react-redux'
-import { Note } from '@/models/noteType'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { getEntryById } from '@/store/journal/thunks'
+import { formatDate } from '@/journal/helpers/convertDate'
+import { format } from 'date-fns'
 
-interface NoteViewProps {
-  note?: Note
-}
-
-export const NoteView = ({ note }: NoteViewProps) => {
+export const NoteView = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { isLoading } = useSelector((state) => state.journal)
-  const isEditMode = !!note
-  const formData = note || {
+  const { isLoading, activeEntry } = useSelector((state) => state.journal)
+  const [isEditMode, setIsEditMode] = useState(!!activeEntry)
+  const { id } = useParams()
+  const formData = activeEntry || {
     date: '',
     title: '',
     body: '',
@@ -31,32 +30,31 @@ export const NoteView = ({ note }: NoteViewProps) => {
 
   const emotions: Emotion[] = Object.values(Emotion)
 
+  useEffect(() => {
+    dispatch(getEntryById(id))
+    setIsEditMode(true)
+  }, [dispatch, id])
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (isEditMode) {
+      setIsEditMode(false)
       // dispatch(updateEntry({ date, title, body, emotion }))
     } else {
       dispatch(addNewEntry({ date, title, body, emotion }))
+      navigate(-1)
     }
-    navigate(-1)
   }
 
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-    })
-  }
   return (
     <>
       <form action="" onSubmit={handleSubmit}>
         <div className="flex">
           <div className="basis-3/4 items-center justify-center">
             <h2 className="text-2xl font-bold tracking-tight">
-              {note ? `Subject: ${note.title}` : 'New Note'}
+              {isEditMode ? `Subject: ${activeEntry.title}` : 'New Note'}
             </h2>
-            {!note && (
+            {isEditMode && (
               <p className="text-medium text-muted-foreground">
                 This is a new note. You can start typing here.
               </p>
@@ -64,58 +62,66 @@ export const NoteView = ({ note }: NoteViewProps) => {
             <div className="pt-10 grid gap-6">
               <div className="grid gap-2">
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  {note ? 'Date' : 'Pick a Date'}
+                  {isEditMode ? 'Date' : 'Pick a Date'}
                 </label>
-                {note ? (
-                  <p>{formatDate(note.date.toString())}</p>
+                {isEditMode ? (
+                  <p>{formatDate(activeEntry.date)}</p>
                 ) : (
                   <DatePicker
                     onSelect={(date) =>
-                      onInputChange({ target: { name: 'date', value: date } })
+                      onInputChange({
+                        target: {
+                          name: 'date',
+                          value: format(date, 'yyyy-MM-dd'),
+                        },
+                      })
                     }
                   ></DatePicker>
                 )}
               </div>
-              {!note && (
-                <div className="grid gap-2">
-                  <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                    Subject
-                  </label>
-                  {note ? (
-                    <h2>{note.title}</h2>
-                  ) : (
-                    <Input
-                      value={title}
-                      name="title"
-                      onChange={onInputChange}
-                    ></Input>
-                  )}
-                </div>
-              )}
+              <div className="grid gap-2">
+                <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Subject
+                </label>
+                {isEditMode ? (
+                  <h2>{activeEntry.title}</h2>
+                ) : (
+                  <Input
+                    value={isEditMode ? activeEntry.title : title}
+                    name="title"
+                    onChange={onInputChange}
+                  ></Input>
+                )}
+              </div>
               <div className="grid gap-2">
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   Description
                 </label>
-                {note ? (
-                  <p>{note.body}</p>
+                {isEditMode ? (
+                  <p>{activeEntry.body}</p>
                 ) : (
                   <Textarea
-                    value={body}
+                    value={isEditMode ? activeEntry.body : body}
                     name="body"
+                    className="h-40"
                     onChange={onInputChange}
                   ></Textarea>
                 )}
               </div>
               <h2 className="text-xl font-bold tracking-tight">
-                {note ? `Your emotion` : 'How do you feel today?'}
+                {isEditMode ? `Your emotion` : 'How do you feel today?'}
               </h2>
               <div className="flex gap-6">
                 {emotions.map((em) => (
                   <EmotionButton
-                    className={emotion === em ? 'bg-accent' : ''}
+                    className={
+                      (isEditMode ? activeEntry.emotion : emotion) === em
+                        ? 'bg-accent'
+                        : ''
+                    }
                     key={em}
                     emotion={em}
-                    disabled={!!note}
+                    disabled={!!isEditMode}
                     onInputChange={onInputChange}
                   />
                 ))}
@@ -129,7 +135,7 @@ export const NoteView = ({ note }: NoteViewProps) => {
                   Cancel
                 </Button>
                 <Button type="submit" disabled={isLoading}>
-                  {note ? 'Update Note' : 'Create Note'}
+                  {isEditMode ? 'Update Note' : 'Create Note'}
                 </Button>
               </div>
             </div>

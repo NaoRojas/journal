@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { Note } from '@/models/noteType'
 import { formatDate } from '@/journal/helpers/convertDate';
+import { Timestamp } from 'firebase/firestore'
 
 interface State {
   isLoading: boolean;
@@ -24,15 +25,22 @@ export const journalSlice = createSlice({
   name: 'journal',
   initialState,
   reducers: {
-
     filterEntriesByMonth: (state, action) => {
-      state.isLoading = false
-      state.month = action.payload
-      state.filteredEntries = state.entries.filter((entry) => formatDate(entry.date).includes(action.payload))
+      state.isLoading = false;
+      state.month = action.payload;
+      state.filteredEntries = state.entries.filter((entry) =>
+        entry.date.includes(action.payload)
+      )
+      console.log('entries2', state.entries);
     },
     setEntries: (state, action) => {
-      state.entries = action.payload
+      state.entries = action.payload.map(entry => ({
+        ...entry,
+        date: entry.date instanceof Timestamp ? formatDate(entry.date) : entry.date
+      }));
       state.isLoading = false;
+      console.log('entries1', state.entries);
+
     },
     setMonth: (state, action) => {
       state.month = action.payload
