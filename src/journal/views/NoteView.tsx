@@ -32,6 +32,8 @@ export const NoteView = () => {
 
   useEffect(() => {
     dispatch(getEntryById(id))
+    console.log('id', id)
+
     if (id) {
       setIsEditMode(true)
     }
@@ -40,7 +42,7 @@ export const NoteView = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (isEditMode) {
-      setIsEditMode(false)
+      // setIsEditMode(false)
       // dispatch(updateEntry({ date, title, body, emotion }))
     } else {
       dispatch(addNewEntry({ date, title, body, emotion }))
@@ -66,46 +68,41 @@ export const NoteView = () => {
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   {isEditMode ? 'Date' : 'Pick a Date'}
                 </label>
-                {isEditMode ? (
-                  <p>{activeEntry?.date}</p>
-                ) : (
+                {
                   <DatePicker
+                    value={isEditMode ? activeEntry?.date : null}
                     onSelect={(date) =>
                       onInputChange({
                         target: { name: 'date', value: date },
                       })
                     }
                   />
-                )}
+                }
               </div>
               <div className="grid gap-2">
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   Subject
                 </label>
-                {isEditMode ? (
-                  <h2>{activeEntry?.title}</h2>
-                ) : (
+                {
                   <Input
                     value={isEditMode ? activeEntry?.title : title}
                     name="title"
                     onChange={onInputChange}
                   ></Input>
-                )}
+                }
               </div>
               <div className="grid gap-2">
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   Description
                 </label>
-                {isEditMode ? (
-                  <p>{activeEntry?.body}</p>
-                ) : (
+                {
                   <Textarea
                     value={isEditMode ? activeEntry?.body : body}
                     name="body"
                     className="h-40"
                     onChange={onInputChange}
                   ></Textarea>
-                )}
+                }
               </div>
               <h2 className="text-xl font-bold tracking-tight">
                 {isEditMode ? `Your emotion` : 'How do you feel today?'}
@@ -125,11 +122,12 @@ export const NoteView = () => {
                   />
                 ))}
               </div>
-              <div className="flex flex-col-2 justify-end">
+              <div className="flex flex-col-2 gap-2 justify-end">
                 <Button
                   variant={'secondary'}
                   disabled={isLoading}
                   className="mr-2"
+                  onClick={() => navigate('/journal')}
                 >
                   Cancel
                 </Button>
