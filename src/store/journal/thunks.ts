@@ -30,10 +30,10 @@ export const getEntries = () => {
       dispatch(setLoading(true))
 
       const { uid } = getState().auth
-      console.log('uid', uid)
       const notes = await loadNotes({ uid })
       dispatch(setEntries(notes))
       dispatch(setMenuItemsNavBar(getState().journal.month))
+      console.log('getEntries', notes)
     }
     catch (error) {
       console.log('error', error)
@@ -60,11 +60,13 @@ export const getEntriesByMonth = (month: string) => {
 export const getEntryById = (id: string) => {
   return async (dispatch, getState) => {
     try {
+      const { entries } = getState().journal
       dispatch(setLoading(true))
-      const { uid } = getState().auth
-      const notes = await loadNotes({ uid })
-      const note = notes.find((note) => note.id === id)
+      console.log('getEntryById notes', entries)
+      const note = entries.find((note) => note.id === id)
       dispatch(setActiveEntry(note))
+      console.log('getEntryById', note)
+
     }
     catch (error) {
       console.log('error', error)

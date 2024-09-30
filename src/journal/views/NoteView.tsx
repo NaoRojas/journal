@@ -11,14 +11,13 @@ import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getEntryById } from '@/store/journal/thunks'
-import { formatDate } from '@/journal/helpers/convertDate'
-import { format } from 'date-fns'
+import { formatDate } from '../helpers/convertDate'
 
 export const NoteView = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { isLoading, activeEntry } = useSelector((state) => state.journal)
-  const [isEditMode, setIsEditMode] = useState(!!activeEntry)
+  const [isEditMode, setIsEditMode] = useState(false)
   const { id } = useParams()
   const formData = activeEntry || {
     date: '',
@@ -52,7 +51,7 @@ export const NoteView = () => {
         <div className="flex">
           <div className="basis-3/4 items-center justify-center">
             <h2 className="text-2xl font-bold tracking-tight">
-              {isEditMode ? `Subject: ${activeEntry.title}` : 'New Note'}
+              {isEditMode ? `Subject: ${activeEntry?.title}` : 'New Note'}
             </h2>
             {isEditMode && (
               <p className="text-medium text-muted-foreground">
@@ -64,30 +63,30 @@ export const NoteView = () => {
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   {isEditMode ? 'Date' : 'Pick a Date'}
                 </label>
-                {isEditMode ? (
-                  <p>{formatDate(activeEntry.date)}</p>
+                {/* {isEditMode ? (
+                  <p>{formatDate(activeEntry?.date)}</p>
                 ) : (
                   <DatePicker
                     onSelect={(date) =>
                       onInputChange({
                         target: {
                           name: 'date',
-                          value: format(date, 'yyyy-MM-dd'),
+                          value: date,
                         },
                       })
                     }
                   ></DatePicker>
-                )}
+                )} */}
               </div>
               <div className="grid gap-2">
                 <label className="text-medium font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   Subject
                 </label>
                 {isEditMode ? (
-                  <h2>{activeEntry.title}</h2>
+                  <h2>{activeEntry?.title}</h2>
                 ) : (
                   <Input
-                    value={isEditMode ? activeEntry.title : title}
+                    value={isEditMode ? activeEntry?.title : title}
                     name="title"
                     onChange={onInputChange}
                   ></Input>
@@ -98,10 +97,10 @@ export const NoteView = () => {
                   Description
                 </label>
                 {isEditMode ? (
-                  <p>{activeEntry.body}</p>
+                  <p>{activeEntry?.body}</p>
                 ) : (
                   <Textarea
-                    value={isEditMode ? activeEntry.body : body}
+                    value={isEditMode ? activeEntry?.body : body}
                     name="body"
                     className="h-40"
                     onChange={onInputChange}
@@ -115,7 +114,7 @@ export const NoteView = () => {
                 {emotions.map((em) => (
                   <EmotionButton
                     className={
-                      (isEditMode ? activeEntry.emotion : emotion) === em
+                      (isEditMode ? activeEntry?.emotion : emotion) === em
                         ? 'bg-accent'
                         : ''
                     }
