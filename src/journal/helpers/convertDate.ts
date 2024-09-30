@@ -7,11 +7,6 @@ export const formatDate = (timestamp) => {
     timestamp = new Timestamp(timestamp.seconds, timestamp.nanoseconds)
   }
   const date = timestamp.toDate()
-  console.log('date', date.toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  }))
   return date.toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'long',

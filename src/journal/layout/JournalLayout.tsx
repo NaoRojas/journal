@@ -16,7 +16,10 @@ export const JournalLayout = () => {
           <div className="flex flex-col">
             <Toolbar />
             <div className="flex flex-1">
-              <div className="scrollable-area relative flex w-full flex-col">
+              <div
+                className="scrollable-area relative flex w-full flex-col"
+                style={{ maxHeight: '90vh', minHeight: '0px' }}
+              >
                 <div className="content-wrapper h-full">
                   <div className="content h-full">
                     <Outlet />

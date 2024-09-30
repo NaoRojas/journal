@@ -55,3 +55,18 @@ export const getEntriesByMonth = (month: string) => {
     }
   }
 }
+
+export const getEntryById = (id: string) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(setLoading(true))
+      const { uid } = getState().auth
+      const notes = await loadNotes({ uid })
+      const note = notes.find((note) => note.id === id)
+      dispatch(setActiveEntry(note))
+    }
+    catch (error) {
+      console.log('error', error)
+    }
+  }
+}

@@ -39,6 +39,7 @@ export const journalSlice = createSlice({
     },
     setActiveEntry: (state, action) => {
       state.activeEntry = action.payload
+      state.isLoading = false;
     },
     addEntry: (state, action) => {
       state.entries.push(action.payload)

@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { format } from 'date-fns'
+import { format, set } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -13,13 +13,19 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 
-export function DatePicker({ onSelect }) {
+export function DatePicker({ onSelect, value = null }) {
   const [date, setDate] = React.useState<Date>()
 
   const onDateSelect = (date) => {
     setDate(date)
-    onSelect(date)
+    onSelect(value || date)
   }
+
+  React.useEffect(() => {
+    if (value) {
+      setDate(value)
+    }
+  }, [])
 
   return (
     <Popover>
@@ -28,15 +34,19 @@ export function DatePicker({ onSelect }) {
           variant={'outline'}
           className={cn(
             'w-[280px] justify-start text-left font-normal',
-            !date && 'text-muted-foreground'
+            !!(value || date) && 'text-muted-foreground'
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, 'PPP') : <span>Pick a date</span>}
+          {value ?? date ? (
+            format(value || date, 'PPP')
+          ) : (
+            <span>Pick a date</span>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
-        <Calendar mode="single" selected={date} onSelect={onDateSelect} />
+        <Calendar selected={value || date} onSelect={onDateSelect} />
       </PopoverContent>
     </Popover>
   )

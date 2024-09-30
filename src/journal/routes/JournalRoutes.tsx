@@ -9,6 +9,7 @@ export const JounalRoutes = () => {
       <Route path="/" element={<JournalLayout />}>
         <Route path="journal" element={<JournalPage />} />
         <Route path="new" element={<NoteView />} />
+        <Route path=":id" element={<NoteView />} />
       </Route>
 
       <Route path="/*" element={<Navigate to="/journal" />} />
