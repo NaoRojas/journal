@@ -22,7 +22,7 @@ export const NoteCard = ({ note }) => {
         </div>
       </CardContent>
       <CardFooter>
-        <p>{formatDate(note.date)}</p>
+        <p>{note.date}</p>
       </CardFooter>
     </Card>
   )

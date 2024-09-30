@@ -72,7 +72,7 @@ export const NoteView = () => {
                   <DatePicker
                     onSelect={(date) =>
                       onInputChange({
-                        target: { name: 'date', value: formatDate(date) },
+                        target: { name: 'date', value: date },
                       })
                     }
                   />
