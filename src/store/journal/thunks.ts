@@ -33,7 +33,7 @@ export const getEntries = () => {
       const notes = await loadNotes({ uid })
       dispatch(setEntries(notes))
       dispatch(setMenuItemsNavBar(getState().journal.month))
-      console.log('getEntries', notes)
+
     }
     catch (error) {
       console.log('error', error)

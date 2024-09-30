@@ -30,6 +30,7 @@ export const Navbar = () => {
             {menuItems.map((menuItem) => {
               return (
                 <a
+                  key={menuItem.month}
                   className={`group flex items-center justify-between rounded-lg p-2 hover:bg-gray-200 ${
                     month === menuItem.month ? 'bg-gray-300' : ''
                   }`}

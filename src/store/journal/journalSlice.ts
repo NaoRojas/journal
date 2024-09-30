@@ -29,7 +29,7 @@ export const journalSlice = createSlice({
       state.isLoading = false;
       state.month = action.payload;
       state.filteredEntries = state.entries.filter((entry) =>
-        entry.date.includes(action.payload)
+        entry.date?.includes(action.payload)
       )
       console.log('entries2', state.entries);
     },
