@@ -11,15 +11,19 @@ import { useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getEntryById } from '@/store/journal/thunks'
-import { formatDate } from '../helpers/convertDate'
-import { Calendar } from 'lucide-react'
+import { updateEntryNote } from '@/store/journal/thunks'
+import { useToast } from '@/hooks/use-toast'
 
 export const NoteView = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { isLoading, activeEntry } = useSelector((state) => state.journal)
+  const { isLoading, activeEntry, isSuccessful } = useSelector(
+    (state) => state.journal
+  )
   const [isEditMode, setIsEditMode] = useState(false)
   const { id } = useParams()
+
+  const { toast } = useToast()
   const formData = {
     date: null,
     title: '',
@@ -39,15 +43,32 @@ export const NoteView = () => {
     }
   }, [dispatch, id])
 
+  const showToaster = () => {
+    if (isSuccessful) {
+      toast({
+        title: `${isEditMode ? 'Note Updated' : 'Note Created'}`,
+        description: `Your note has been ${isEditMode ? 'updated' : 'created'}`,
+      })
+    } else {
+      toast({
+        title: `Error`,
+        description: `There was an error while ${
+          isEditMode ? 'updating' : 'creating'
+        } your note`,
+      })
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (isEditMode) {
       // setIsEditMode(false)
-      // dispatch(updateEntry({ date, title, body, emotion }))
+      dispatch(updateEntryNote({ id, date, title, body, emotion }))
     } else {
       dispatch(addNewEntry({ date, title, body, emotion }))
-      navigate(-1)
     }
+    navigate(-1)
+    showToaster()
   }
 
   return (

@@ -1,6 +1,3 @@
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-
 export const AuthLayout = ({ children, title = '', subtitle = '' }) => {
   return (
     <div className="container relative hidden min-h-svh flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">

@@ -52,13 +52,10 @@ export const journalSlice = createSlice({
     addEntry: (state, action) => {
       state.entries.push(action.payload)
       state.isLoading = false;
+      state.isSuccessful = true
+
     },
-    updateEntry: (state, action) => {
-      const { note } = action.payload;
-      const entryIndex = state.entries.findIndex((entry) => entry.id === note.id);
-      if (entryIndex !== -1) {
-        state.entries[entryIndex] = { ...state.entries[entryIndex], ...note };
-      }
+    updateEntry: (state) => {
       state.isLoading = false;
       state.isSuccessful = true
     },
