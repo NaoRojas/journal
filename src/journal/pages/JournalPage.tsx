@@ -17,7 +17,7 @@ export const JournalPage = () => {
       <h2>{month}</h2>
       {isLoading && <Loading />}
       {filteredEntries.length > 0 ? (
-        <div className="justify-center gap-6 rounded-lg p-8 md:grid lg:grid-cols-2 xl:grid-cols-2">
+        <div className="justify-center gap-6 rounded-lg py-8 md:grid lg:grid-cols-2 xl:grid-cols-2">
           {filteredEntries.map((entry) => (
             <NoteCard key={entry.id} note={entry} />
           ))}

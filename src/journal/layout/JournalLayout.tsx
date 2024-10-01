@@ -2,7 +2,7 @@ import { Navbar } from '@/components/Navbar'
 import { Toolbar } from '@/components/Toolbar'
 import { AddFloatingButton } from '../components/AddFloatingButton'
 import { Outlet } from 'react-router-dom'
-import { ToastProvider, Toast } from '@/components/ui/toast'
+import { Toaster } from 'sonner'
 
 export const JournalLayout = () => {
   return (
@@ -29,9 +29,7 @@ export const JournalLayout = () => {
             </div>
           </div>
         </div>
-        <ToastProvider>
-          <Toast />
-        </ToastProvider>
+        <Toaster position="top-right" />
       </main>
     </body>
   )

@@ -12,8 +12,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getEntryById } from '@/store/journal/thunks'
 import { updateEntryNote } from '@/store/journal/thunks'
-import { useToast } from '@/hooks/use-toast'
-
+import { useMemo } from 'react'
+import { toast } from 'sonner'
 export const NoteView = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -23,14 +23,19 @@ export const NoteView = () => {
   const [isEditMode, setIsEditMode] = useState(false)
   const { id } = useParams()
 
-  const { toast } = useToast()
-  const formData = activeEntry || {
-    date: null,
-    title: '',
-    body: '',
-    emotion: '',
-  }
-  const { date, title, body, emotion, onInputChange } = useForm(formData)
+  const initialForm = useMemo(
+    () => ({
+      title: '',
+      body: '',
+      date: null,
+      emotion: '',
+    }),
+    []
+  )
+
+  const formData = activeEntry || initialForm
+  const { date, title, body, emotion, onInputChange, onResetForm } =
+    useForm(formData)
 
   const emotions: Emotion[] = Object.values(Emotion)
 
@@ -45,17 +50,11 @@ export const NoteView = () => {
 
   const showToaster = () => {
     if (isSuccessful) {
-      toast({
-        title: `${isEditMode ? 'Note Updated' : 'Note Created'}`,
-        description: `Your note has been ${isEditMode ? 'updated' : 'created'}`,
-      })
+      toast.success(`${isEditMode ? 'Note updated' : 'Note created'}`)
     } else {
-      toast({
-        title: `Error`,
-        description: `There was an error while ${
-          isEditMode ? 'updating' : 'creating'
-        } your note`,
-      })
+      toast.error(
+        `${isEditMode ? 'Failed to update note' : 'Failed to create note'}`
+      )
     }
   }
 
@@ -66,8 +65,10 @@ export const NoteView = () => {
     } else {
       dispatch(addNewEntry({ date, title, body, emotion }))
     }
-    navigate(-1)
     showToaster()
+
+    navigate(-1)
+    onResetForm()
   }
 
   return (
