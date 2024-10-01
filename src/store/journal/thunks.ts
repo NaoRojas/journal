@@ -1,6 +1,6 @@
 import { firebaseDB } from "@/firebase/config"
 import { Note } from "@/models/noteType"
-import { doc, collection, setDoc } from "firebase/firestore"
+import { doc, collection, setDoc, deleteDoc } from "firebase/firestore"
 import { addEntry, setActiveEntry, setLoading, setEntries, filterEntriesByMonth } from "./journalSlice"
 import { loadNotes } from "@/journal/helpers/loadNotes"
 import { setMonth } from "./journalSlice"
@@ -33,6 +33,7 @@ export const getEntries = () => {
       const notes = await loadNotes({ uid })
       dispatch(setEntries(notes))
       dispatch(setMenuItemsNavBar(getState().journal.month))
+      dispatch(filterEntriesByMonth(getState().journal.month))
 
     }
     catch (error) {
@@ -66,6 +67,24 @@ export const getEntryById = (id: string) => {
       const note = entries.find((note) => note.id === id)
       dispatch(setActiveEntry(note))
       console.log('getEntryById', note)
+
+    }
+    catch (error) {
+      console.log('error', error)
+    }
+  }
+}
+
+export const deleteEntry = (id: string) => {
+  return async (dispatch, getState) => {
+    try {
+      console.log('deleteEntry', id)
+      const { uid } = getState().auth
+      dispatch(setLoading(true))
+      const resp = await deleteDoc(doc(collection(firebaseDB, `${uid}/journal/notes`), id))
+      console.log('response', { resp })
+      dispatch(getEntries())
+      dispatch(setLoading(false))
 
     }
     catch (error) {

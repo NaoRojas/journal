@@ -1,26 +1,24 @@
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
-import { formatDate } from '@/journal/helpers/convertDate'
 import {
   ContextMenu,
   ContextMenuContent,
-  ContextMenuRadioGroup,
-  ContextMenuRadioItem,
-  ContextMenuSeparator,
   ContextMenuShortcut,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
   ContextMenuTrigger,
   ContextMenuItem,
-  ContextMenuCheckboxItem,
-  ContextMenuLabel,
 } from '@/components/ui/context-menu'
 import { useNavigate } from 'react-router'
+import { useDispatch } from 'react-redux'
+import { deleteEntry } from '@/store/journal/thunks'
 export const NoteCard = ({ note }) => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const navigateToNote = () => {
     navigate(`/${note.id}`)
   }
+  const deleteNote = () => {
+    dispatch(deleteEntry(note.id))
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -53,7 +51,7 @@ export const NoteCard = ({ note }) => {
           Edit
           <ContextMenuShortcut>⌘E</ContextMenuShortcut>
         </ContextMenuItem>
-        <ContextMenuItem inset>
+        <ContextMenuItem inset onClick={() => deleteNote()}>
           Delete
           <ContextMenuShortcut>⌘D</ContextMenuShortcut>
         </ContextMenuItem>
