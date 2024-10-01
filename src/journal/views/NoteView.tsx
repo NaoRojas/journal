@@ -24,7 +24,7 @@ export const NoteView = () => {
   const { id } = useParams()
 
   const { toast } = useToast()
-  const formData = {
+  const formData = activeEntry || {
     date: null,
     title: '',
     body: '',
@@ -62,7 +62,6 @@ export const NoteView = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (isEditMode) {
-      // setIsEditMode(false)
       dispatch(updateEntryNote({ id, date, title, body, emotion }))
     } else {
       dispatch(addNewEntry({ date, title, body, emotion }))
@@ -91,7 +90,7 @@ export const NoteView = () => {
                 </label>
                 {
                   <DatePicker
-                    value={isEditMode ? activeEntry?.date : null}
+                    value={date}
                     onSelect={(date) =>
                       onInputChange({
                         target: { name: 'date', value: date },
@@ -106,7 +105,7 @@ export const NoteView = () => {
                 </label>
                 {
                   <Input
-                    value={isEditMode ? activeEntry?.title : title}
+                    value={title}
                     name="title"
                     onChange={onInputChange}
                   ></Input>
@@ -118,7 +117,7 @@ export const NoteView = () => {
                 </label>
                 {
                   <Textarea
-                    value={isEditMode ? activeEntry?.body : body}
+                    value={body}
                     name="body"
                     className="h-40"
                     onChange={onInputChange}
@@ -131,11 +130,7 @@ export const NoteView = () => {
               <div className="flex gap-6">
                 {emotions.map((em) => (
                   <EmotionButton
-                    className={
-                      (isEditMode ? activeEntry?.emotion : emotion) === em
-                        ? 'bg-accent'
-                        : ''
-                    }
+                    className={emotion === em ? 'bg-accent' : ''}
                     key={em}
                     emotion={em}
                     disabled={!!isEditMode}
